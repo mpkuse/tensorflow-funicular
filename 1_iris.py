@@ -97,6 +97,7 @@ if __name__=='__main__':
 
     #-----------------------------------------------------------------------
     # Restore Pretrained Model
+    # TODO: This is a ugly way. Best is to use keras's model.save() and model.load()
     if False:
         print 'Restore Model'
         saver = tf.train.Saver()
@@ -114,6 +115,7 @@ if __name__=='__main__':
 
     #------------------------------------------------------------------------
     # Save Model
+    # TODO: This is a ugly way. Best is to use keras's model.save() and model.load()
     saver = tf.train.Saver()
     print 'Save Model'
     save_path = saver.save(sess, "./iris.model/model.ckpt")
