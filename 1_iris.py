@@ -6,7 +6,7 @@
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import tensorflow as tf
 import code
 
@@ -106,7 +106,7 @@ if __name__=='__main__':
     #-----------------------------------------------------------------------
     # Iterations
     train_step = tf.train.GradientDescentOptimizer(0.005).minimize(loss)
-    for i in range(20):
+    for i in range(100):
         tff_loss, _ =  sess.run( [loss, train_step], feed_dict={in_feat: feat , in_logits:desired_logits, in_labels: desired_labels } )
         print 'Iteration#%di: Loss=%4.4f' %(i, tff_loss)
 
@@ -122,3 +122,5 @@ if __name__=='__main__':
     #------------------------------------------------------------------------
     # Run Trained Model - Test Phase
     final_predictions =  sess.run( model(in_feat), feed_dict={in_feat: feat} )
+    print 'final_predictions: ', final_predictions.argmax(axis=1)
+    print 'desired_labels: ', desired_labels

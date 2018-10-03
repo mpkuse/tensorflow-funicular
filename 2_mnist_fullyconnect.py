@@ -7,11 +7,11 @@
 
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import tensorflow as tf
 import code
 import time
-
+import cv2
 
 
 # tf.enable_eager_execution()
@@ -29,11 +29,33 @@ mnist = tf.keras.datasets.mnist
 #---------------------------------------------------------------------------
 # Build Model - Fully Connected
 model = tf.keras.Sequential()
-model.add( tf.keras.layers.Dense( 392, input_shape=(None,784) ) )
-model.add( tf.keras.layers.Dense( 196 ) )
-model.add( tf.keras.layers.Dense( 98 ) )
-model.add( tf.keras.layers.Dense( 49 ) )
-model.add( tf.keras.layers.Dense( 10 ) )
+
+# if True:
+#     model.add( tf.keras.layers.Dense( 392, input_shape=(None,784) ) )
+#     model.add( tf.keras.layers.Dense( 196 ) )
+#     model.add( tf.keras.layers.Dense( 98 ) )
+#     model.add( tf.keras.layers.Dense( 49 ) )
+#     model.add( tf.keras.layers.Dense( 10 ) )
+
+if True:
+    model.add(tf.keras.layers.InputLayer(input_shape=(28*28,) ) )
+    model.add(tf.keras.layers.Reshape((28,28,1)))
+
+
+
+    model.add( tf.keras.layers.Conv2D(kernel_size=(5,5), strides=1, filters=16, padding='same',
+                     activation='relu', name='layer_conv1'), )
+    model.add( tf.keras.layers.MaxPooling2D(pool_size=2, strides=2))
+
+    model.add( tf.keras.layers.Conv2D(kernel_size=5, strides=1, filters=36, padding='same',
+                 activation='relu', name='layer_conv2'))
+    model.add( tf.keras.layers.MaxPooling2D(pool_size=2, strides=2))
+
+    model.add( tf.keras.layers.Flatten())
+    model.add( tf.keras.layers.Dense(128, activation='relu'))
+    model.add( tf.keras.layers.Dense(10, activation='softmax'))
+
+
 
 model.summary()
 
@@ -64,13 +86,15 @@ sess.run(init_op)
 
 #----------------------------------------------------------------------------
 # Iterations
-train_step = tf.train.GradientDescentOptimizer(0.00005).minimize(loss)
+# train_step = tf.train.GradientDescentOptimizer(0.00005).minimize(loss) #TODO
+train_step = tf.train.AdamOptimizer(0.00005).minimize(loss) #TODO
 
 batch_size = 64
-for i in range(10000):
+for i in range(100):
     # start_t = time.time()
     bstart = i*batch_size
     bend = (i+1)*batch_size
+    print 'using : ', bstart, bend , '--->',
 
     feed_in = x_train[bstart:bend,:,:].reshape( batch_size, 28*28 )
     feed_lab = y_train[bstart:bend]
@@ -85,3 +109,16 @@ for i in range(10000):
 saver = tf.train.Saver()
 print 'Save Model'
 save_path = saver.save(sess, "./mnist.model/model.ckpt")
+
+
+#-------------------------------------------------------------------------
+# Test Model
+final_predictions =  sess.run( model(in_), feed_dict={in_: x_test[0:100,:,:].reshape( 100, 28*28 )} )
+final_labels = final_predictions.argmax( axis=1 )
+
+for i in range(100):
+    cv2.imshow( 'x_test',  x_test[i,:,:] )
+    print i, y_test[i], final_labels[i]
+    key = cv2.waitKey(0)
+    if key == ord('q'):
+        break
