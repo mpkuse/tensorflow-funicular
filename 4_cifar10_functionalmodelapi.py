@@ -88,5 +88,35 @@ if False:
     model = tf.keras.models.Model( inputs=input_, outputs=z)
 
 
+
+# Shared Vision Model
+if True:
+    #-----
+    # Define a basic prediction model
+    #-----
+    input_image = tf.keras.layers.Input( shape=(27,27,1) )
+    x = tf.keras.layers.Conv2D( 64, (3,3),  padding='same' )( input_image )
+    x = tf.keras.layers.Conv2D( 64, (3,3),  padding='same' )( x )
+    x = tf.keras.layers.MaxPooling2D( (2,2) )( x )
+    out = tf.keras.layers.Flatten( )( x )
+
+    model_feat = tf.keras.models.Model( inputs=input_image, outputs=out )
+    tf.keras.utils.plot_model( model_feat, to_file='model_feat.png', show_shapes=True )
+
+    #------
+    # Siamese
+    #------
+    ima = tf.keras.layers.Input( shape=(27,27,1) )
+    imb = tf.keras.layers.Input( shape=(27,27,1) )
+
+    outa = model_feat( ima )
+    outb = model_feat( imb )
+
+    conc = tf.keras.layers.concatenate( [outa, outb] )
+    out = tf.keras.layers.Dense( 1, activation='sigmoid' )( conc )
+
+    model = tf.keras.models.Model( inputs=[ima,imb], outputs=out )
+
+
 model.summary()
-tf.keras.utils.plot_model( model, show_shapes=False )
+tf.keras.utils.plot_model( model, show_shapes=True )
