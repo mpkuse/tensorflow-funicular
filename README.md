@@ -9,3 +9,4 @@ tensorflow basic examples.
 ## References
 - [https://github.com/Hvass-Labs/TensorFlow-Tutorials](https://github.com/Hvass-Labs/TensorFlow-Tutorials)
 - [https://keras.io/](https://keras.io/)
+- [https://github.com/keras-team/keras/tree/master/examples](https://github.com/keras-team/keras/tree/master/examples)
