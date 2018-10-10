@@ -61,7 +61,7 @@ if True: # Simple 1 shot
 
     history = model.fit(x=x_train.reshape( x_train.shape[0], x_train.shape[1], x_train.shape[2], 3),
               y=labels_to_logits(y_train),
-              epochs=5, batch_size=128, verbose=2,
+              epochs=5, batch_size=128, verbose=1,
               callbacks=[tb], validation_split=0.1)
     print 'save learned model'
     model.save( 'cifar10_cnn.keras' )
