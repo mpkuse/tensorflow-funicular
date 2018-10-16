@@ -89,7 +89,9 @@ model.compile(optimizer=optimizer,
               metrics=['accuracy'])
 
 model.fit( x=x_train, y=labels_to_logits( y_train ),
-            epochs=1, batch_size=32, verbose=1, validation_split=0.1 )
+            epochs=5, batch_size=32, verbose=1, validation_split=0.1 )
+
+model.save( 'cifar10_cnn_customloss.keras' )
 #
 # #----------------------------------------------------------------------------
 # # Iterations
