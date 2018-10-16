@@ -28,7 +28,7 @@ Except for the fact that I use
 an LSTM (instead of RNN. LSTM is a kind of RNN). A fantastic [explaination on LSTM by colah](http://colah.github.io/posts/2015-08-Understanding-LSTMs/).
 
 #### Misc
-- [5_fcn.py](5_fcn.py): Exploring transposed-convolution (upsampling conv). 
+- [5_fcn.py](5_fcn.py): Exploring transposed-convolution (upsampling conv).
 
 ## References
 - [https://github.com/Hvass-Labs/TensorFlow-Tutorials](https://github.com/Hvass-Labs/TensorFlow-Tutorials)
@@ -53,4 +53,6 @@ Although I still stick to tensorflow.
 Current recommended way is to use keras with tensorflow. Keras defines a pretty intuitive API.
 Although a new user may have a very steep learning curve. I followed the tensorflow tutorial which
 are too basic (does not expose to lot of real cases tensorflow can be used). After that, can
-move onto keras examples.
+move onto keras examples. Be warned though, this takes up a lot of time to learn the core things.
+If you are just looking to use standard APIs to build some kind of entry level ML stuff, this is not
+for you. 
