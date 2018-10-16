@@ -41,7 +41,9 @@ y.append( o )
 
 x = np.array( x )
 y = np.array( y )
-code.interact( local=locals() )
+print 'x.shape', x.shape
+print 'y.shape', y.shape
+# code.interact( local=locals() )
 
 #---
 #--- Construct Network

@@ -30,14 +30,14 @@ mnist = tf.keras.datasets.mnist
 # Build Model - Fully Connected
 model = tf.keras.Sequential()
 
-# if True:
-#     model.add( tf.keras.layers.Dense( 392, input_shape=(None,784) ) )
-#     model.add( tf.keras.layers.Dense( 196 ) )
-#     model.add( tf.keras.layers.Dense( 98 ) )
-#     model.add( tf.keras.layers.Dense( 49 ) )
-#     model.add( tf.keras.layers.Dense( 10 ) )
-
 if True:
+    model.add( tf.keras.layers.Dense( 392, input_shape=(None,784) ) )
+    model.add( tf.keras.layers.Dense( 196 ) )
+    model.add( tf.keras.layers.Dense( 98 ) )
+    model.add( tf.keras.layers.Dense( 49 ) )
+    model.add( tf.keras.layers.Dense( 10 ) )
+
+if False:
     model.add(tf.keras.layers.InputLayer(input_shape=(28*28,) ) )
     model.add(tf.keras.layers.Reshape((28,28,1)))
 
