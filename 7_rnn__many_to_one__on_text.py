@@ -29,7 +29,7 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 W = 40
 x = []
 y = []
-for i in range( 0, len(text)-W, 10 ): # make this 3 on pc with larger memory
+for i in range( 0, len(text)-W, 5 ): # make this 3 on pc with larger memory
     if i%10000 == 0:
         print 'process char#', i , ' of ', len(text)
     # print i, i+W
@@ -62,7 +62,7 @@ print 'y.shape', y.shape
 model = keras.Sequential()
 model.add(keras.layers.LSTM(128, input_shape=( x.shape[1], x.shape[2])))
 model.add(keras.layers.Dense( x.shape[2], activation='softmax'))
-model.load_weights( 'model_text.keras')
+# model.load_weights( 'model_text.keras')
 
 model.summary()
 keras.utils.plot_model( model, show_shapes=True )
@@ -72,5 +72,5 @@ keras.utils.plot_model( model, show_shapes=True )
 #---
 optimizer = keras.optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'] )
-model.fit(x=x, y=y, batch_size=256, epochs=120, validation_split=0.1, initial_epoch=60 )
+model.fit(x=x, y=y, batch_size=256, epochs=120, validation_split=0.1 )
 model.save('model_text.keras')

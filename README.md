@@ -23,9 +23,10 @@ tensorflow/keras basic examples.
 
 #### Recurrent Networks
 - [7_rnn.py](7_rnn.py): Toy RNN example from [Karpaty's blog post on rnn](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
-- [7_rnn_on_text.py](7_rnn_on_text.py): Learning to predict next char with RNN.
+- [7_rnn__many_to_one__on_text.py](7_rnn__many_to_one__on_text.py): Learning to predict next char with RNN.
 Except for the fact that I use
-an LSTM (instead of RNN. LSTM is a kind of RNN). A fantastic [explaination on LSTM by colah](http://colah.github.io/posts/2015-08-Understanding-LSTMs/).
+an LSTM (instead of RNN. LSTM is a kind of RNN). A fantastic [explaination on LSTM by colah](http://colah.github.io/posts/2015-08-Understanding-LSTMs/). This is a many-to-one LSTM.
+- [lstm_lang_models](lstm_lang_models): A more sophisticated LSTM example on text. Uses the PTB text corpus.
 
 #### Misc
 - [5_fcn.py](5_fcn.py): Exploring transposed-convolution (upsampling conv).
@@ -55,4 +56,4 @@ Although a new user may have a very steep learning curve. I followed the tensorf
 are too basic (does not expose to lot of real cases tensorflow can be used). After that, can
 move onto keras examples. Be warned though, this takes up a lot of time to learn the core things.
 If you are just looking to use standard APIs to build some kind of entry level ML stuff, this is not
-for you. 
+for you.
