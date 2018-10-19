@@ -106,3 +106,4 @@ if __name__ == '__main__':
     model.compile( loss='categorical_crossentropy', optimizer='adam', metrics=['categorical_accuracy'] )
     # model.fit(x=X, y=Y, batch_size=4, epochs=10, validation_split=0.1, initial_epoch=0 )
     model.fit_generator( gen, epochs=40, verbose=1 )
+    model.save( 'model.keras')
