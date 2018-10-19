@@ -47,35 +47,33 @@ class KerasBatchGenerator( keras.utils.Sequence ):
 
 
     def __len__(self):
-        return len(self.words_nums) // (self.t_steps*self.batch_size*self.skip_step)
+        return len(self.words_nums) // (self.skip_step*self.batch_size)
 
     # def generate( self ):
     def __getitem__( self, idx ):
-        while True:
-            X = []
-            Y = []
-            for i in range( self.batch_size ): #generate 32 training samples each time
-                if self.curr_pos + self.t_steps >= len( self.words_nums ):
-                    self.curr_pos = 0
+        e_start = idx*self.skip_step*self.batch_size
 
-                a = self.words_nums[ self.curr_pos : self.curr_pos+self.t_steps ]
-                # b = self.words_nums[ self.curr_pos+self.t_steps ]
-                b_ak = self.words_nums[ self.curr_pos+1 : self.curr_pos+self.t_steps+1 ]
+        # print '---idx=', idx
 
-                X.append( a )
-                # b_1hot = np.zeros( self.vocab_size )
-                # b_1hot[b] = 1.
-                # Y.append( b_1hot )
-                Y.append( keras.utils.to_categorical( b_ak, self.vocab_size ) )
+        X = []
+        Y = []
+        for i in range( self.batch_size ):
+            s = e_start+self.skip_step*i
+            e = e_start+self.skip_step*i + self.t_steps
 
+            # if i == 0 or i==self.batch_size-1:
+            #     print i, 'start=', s,
+            #     print '\tend=', e
+            # if i==1:
+            #     print '\t...'
 
-                self.curr_pos += self.t_steps
-            X = np.array( X ) #32 x 30 ints
-            Y = np.array( Y ) #32 x 30 x 10000
-            # code.interact( local=locals() )
-            # yield X, Y
-            return X, Y
-
+            a = self.words_nums[ s:e ]
+            b = self.words_nums[ s+1:e+1 ]
+            X.append( a )
+            Y.append( keras.utils.to_categorical( b, self.vocab_size ) )
+        X = np.array( X ) #32 x 30 ints
+        Y = np.array( Y ) #32 x 30 x 10000
+        return X, Y
 
 
 
@@ -88,6 +86,7 @@ if __name__ == '__main__':
 
     # do gen[0], gen[1] ... to get the items.
     # code.interact( local=locals() )
+    # quit()
 
     #---
     #--- Make Model
