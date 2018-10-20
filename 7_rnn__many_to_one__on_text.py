@@ -29,7 +29,7 @@ indices_char = dict((i, c) for i, c in enumerate(chars))
 W = 40
 x = []
 y = []
-for i in range( 0, len(text)-W, 5 ): # make this 3 on pc with larger memory
+for i in range( 0, len(text)-W, 500 ): # make this 3 on pc with larger memory
     if i%10000 == 0:
         print 'process char#', i , ' of ', len(text)
     # print i, i+W
@@ -87,7 +87,7 @@ else:
 #---
 #--- Generate Text
 #---
-ALL_GEN = []
+
 if True: # Use one of the training data
     seed = np.expand_dims( x[10], 0 ) #need a seed to start generation.
 if True:
@@ -101,17 +101,20 @@ if True:
 print 'seed.shape=', seed.shape
 assert( len(seed.shape) == 3 and seed.shape[0] == 1 and seed.shape[1] == W and seed.shape[2] == len(chars) )
 
-
+ALL_GEN = []
+ALL_GEN_confidence = []
 print 'Generating 2000 chars'
 for i in range(2000):
     if i%100==0:
         print 'Generated char #',i
     pr = model.predict( seed )[0].argmax() #index of prediction.
+    pr_confidence = model.predict( seed )[0].max() #confidence of prediction.
     pr_ch = indices_char[ pr ] #look this up in the vocab
 
     # Store/print the prediction
     # print '%c' %(pr_ch),
     ALL_GEN.append( pr_ch )
+    ALL_GEN_confidence.append( pr_confidence )
     # print pr_ch, #' (', pr, ')'
 
     # Make a new seed using the prediction in this current step,
@@ -123,10 +126,21 @@ for i in range(2000):
 
 print ''.join( ALL_GEN )
 
+# print ''
+# print ''.join( [ indices_char[v] for v in orf_seed.argmax( axis=-1 )[0] ] )
+
+endc = '\033[0m'
+for ch, ch_conf in zip(ALL_GEN, ALL_GEN_confidence):
+    if ch_conf > 0.95:
+        color = '\033[95m'
+    elif ch_conf > 0.9 and ch_conf <= 0.95:
+        color = '\033[92m'
+    elif ch_conf > 0.8 and ch_conf <= 0.9:
+        color = '\033[93m'
+    else:
+        color = '\033[91m'
+    print '%s%s%s' %(color,ch,endc),
 print ''
-print ''.join( [ indices_char[v] for v in orf_seed.argmax( axis=-1 )[0] ] )
-
-
 
 # After learning this net for about 120 epochs (took an hour on my TitanX gpu.)
 # here, is a sample generation:

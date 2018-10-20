@@ -102,8 +102,31 @@ if __name__ == '__main__':
     model.summary()
     keras.utils.plot_model( model, show_shapes=True )
 
+    if False:
+        optimizer = keras.optimizers.Adadelta(  )
+        model.compile( loss='categorical_crossentropy', optimizer=optimizer, metrics=['categorical_accuracy'] )
+        # model.fit(x=X, y=Y, batch_size=4, epochs=10, validation_split=0.1, initial_epoch=0 )
+        model.fit_generator( gen, epochs=40, verbose=1, validation_split=0.1 )
+        model.save( 'model.keras')
+    else:
+        model.load_weights( 'model.keras' )
 
-    model.compile( loss='categorical_crossentropy', optimizer='adam', metrics=['categorical_accuracy'] )
-    # model.fit(x=X, y=Y, batch_size=4, epochs=10, validation_split=0.1, initial_epoch=0 )
-    model.fit_generator( gen, epochs=40, verbose=1 )
-    model.save( 'model.keras')
+
+    #---
+    #--- Test on training data
+    #---
+    gX, gY = gen[15] #gets a whole batch
+    gX = gX[0:1]
+    gY = gY[0:1]
+    gY_cap = model.predict( gX )
+
+    print ' '.join( [ gen.indx_word[v] for v in gY[0].argmax( -1 ) ] )
+    print '---'
+    print ' '.join( [ gen.indx_word[v] for v in gY_cap[0].argmax( -1 ) ] )
+
+
+
+    #---
+    #--- Generate Text from some seed
+    #---
+    # seed =

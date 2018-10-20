@@ -26,7 +26,8 @@ tensorflow/keras basic examples.
 - [7_rnn__many_to_one__on_text.py](7_rnn__many_to_one__on_text.py): Learning to predict next char with RNN.
 Except for the fact that I use
 an LSTM (instead of RNN. LSTM is a kind of RNN). A fantastic [explaination on LSTM by colah](http://colah.github.io/posts/2015-08-Understanding-LSTMs/). This is a many-to-one LSTM.
-- [lstm_lang_models](lstm_lang_models): A more sophisticated LSTM example on text. Uses the PTB text corpus.
+- [lstm_lang_models](lstm_lang_models): A more sophisticated LSTM 3 layer example on text. Uses the PTB text corpus.
+- [7_conv_lstm.py](7_conv_lstm.py) Convolutional LSTMs to generate images. This is in some sense similar to text generation. But uses a conv-lstm (instead of fully-connected-lstm). 
 
 #### Misc
 - [5_fcn.py](5_fcn.py): Exploring transposed-convolution (upsampling conv).
