@@ -7,9 +7,18 @@ import code
 import time
 import cv2
 import math
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-from viz_utils import labels_to_logits
+# from viz_utils import labels_to_logits
+def labels_to_logits( labels, n_classes=None ):
+    if n_classes is None:
+        n_classes = len( np.unique( labels ) )
+
+    logits = np.zeros( (labels.shape[0], n_classes) )
+
+    for i in range( len(labels) ):
+        logits[i, labels[i] ] = 1.
+    return logits
 
 
 if False: #trying out functional model API of keras

@@ -7,8 +7,19 @@ import code
 import time
 import cv2
 import math
-import matplotlib.pyplot as plt
-from viz_utils import labels_to_logits
+# import matplotlib.pyplot as plt
+# from viz_utils import labels_to_logits
+
+def labels_to_logits( labels, n_classes=None ):
+    if n_classes is None:
+        n_classes = len( np.unique( labels ) )
+
+    logits = np.zeros( (labels.shape[0], n_classes) )
+
+    for i in range( len(labels) ):
+        logits[i, labels[i] ] = 1.
+    return logits
+
 #---------------------------------------------------------------------------
 # Data
 mnist = tf.keras.datasets.mnist
@@ -42,7 +53,7 @@ model.compile(optimizer=optimizer,
 
 #----------------------------------------------------------------------------
 # Iterations
-if False:
+if True:
 
     model.fit(x=x_train.reshape( 60000, 28*28),
               y=labels_to_logits(y_train),
@@ -60,8 +71,8 @@ if True:
 #---------------------------------------------------------------------------
 # Evaluate
 score = model.evaluate( x_test.reshape( 10000, 28*28 ), labels_to_logits(y_test), verbose=1 )
-print 'Test Loss: ', score[0]
-print 'Accuracy : ', score[1]
+print( 'Test Loss: ', score[0])
+print( 'Accuracy : ', score[1] )
 
 
 #---------------------------------------------------------------------------
@@ -69,9 +80,9 @@ print 'Accuracy : ', score[1]
 for _ in range(30):
     r = np.random.randint( x_test.shape[0] )
     pred_outs = model.predict( x_test[r,:,:].reshape( 1, 28*28) )
-    print 'r=', r
-    print 'predicted = ', pred_outs.argmax(),
-    print 'ground truth = ', y_test[r],
-    print ''
+    print( 'r=', r )
+    print( 'predicted = ', pred_outs.argmax(), )
+    print( 'ground truth = ', y_test[r], )
+    print( '' )
     cv2.imshow( 'test image', x_test[r,:,:].astype('uint8') )
     cv2.waitKey(0)

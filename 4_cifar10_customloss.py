@@ -3,37 +3,46 @@
 
 import numpy as np
 # import matplotlib.pyplot as plt
-# import tensorflow as tf
-import keras
-from keras import backend as K
+import tensorflow as tf
+# import keras
+# from keras import backend as K
 import code
 import time
 import cv2
 import math
 # import matplotlib.pyplot as plt
 
-from viz_utils import labels_to_logits
+# from viz_utils import labels_to_logits
+def labels_to_logits( labels, n_classes=None ):
+    if n_classes is None:
+        n_classes = len( np.unique( labels ) )
+
+    logits = np.zeros( (labels.shape[0], n_classes) )
+
+    for i in range( len(labels) ):
+        logits[i, labels[i] ] = 1.
+    return logits
 
 def custom_loss( y_true, y_pred ):
 # def custom_loss( params ):
     # y_true, y_pred = params
     # pass
     # code.interact( local=locals() )
-    u = -K.sum( y_true * K.log(y_pred+1E-6), -1 ) # This is the defination of cross-entropy. basically softmax's log multiply by target
-    return K.maximum( 0., u )
+    u = -tf.keras.backend.sum( y_true * tf.keras.backend.log(y_pred+1E-6), -1 ) # This is the defination of cross-entropy. basically softmax's log multiply by target
+    return tf.keras.backend.maximum( 0., u )
 
 
 if False:  # Play with custom_loss
-    y_true = keras.layers.Input( shape=(10,) )
-    y_pred = keras.layers.Input( shape=(10,) )
+    y_true = tf.keras.layers.Input( shape=(10,) )
+    y_pred = tf.keras.layers.Input( shape=(10,) )
 
     # u = custom_loss( y_true, y_pred )
-    u = keras.layers.Lambda(custom_loss)( [y_true, y_pred] )
-    model = keras.models.Model( inputs=[y_true,y_pred], outputs=u )
+    u = tf.keras.layers.Lambda(custom_loss)( [y_true, y_pred] )
+    model = tf.keras.models.Model( inputs=[y_true,y_pred], outputs=u )
 
 
     model.summary()
-    keras.utils.plot_model( model, show_shapes=True )
+    tf.keras.utils.plot_model( model, show_shapes=True )
 
     a = np.zeros( (2,10) )
     a[0,1] = 1
@@ -47,41 +56,41 @@ if False:  # Play with custom_loss
 
 #-----------------------------------------------------------------------------
 # Data
-cifar10 = keras.datasets.cifar10
+cifar10 = tf.keras.datasets.cifar10
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 #x_train: 50K x 32x32x3
 #y_train: 50K x 1
 
 #-----------------------------------------------------------------------------
 # Model
-model = keras.Sequential()
+model = tf.keras.Sequential()
 
-model.add( keras.layers.Conv2D(32, (3,3), activation='relu', padding='same', input_shape=(32,32,3) ) )
-model.add( keras.layers.Conv2D(32, (3,3), activation='relu', padding='same' ) )
-model.add( keras.layers.MaxPooling2D(pool_size=(2,2)) )
+model.add( tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same', input_shape=(32,32,3) ) )
+model.add( tf.keras.layers.Conv2D(32, (3,3), activation='relu', padding='same' ) )
+model.add( tf.keras.layers.MaxPooling2D(pool_size=(2,2)) )
 
-model.add( keras.layers.Conv2D(64, (3,3), activation='relu', padding='same', input_shape=(32,32,1) ) )
-model.add( keras.layers.Conv2D(64, (3,3), activation='relu', padding='same' ) )
-model.add( keras.layers.MaxPooling2D(pool_size=(2,2)) )
+model.add( tf.keras.layers.Conv2D(64, (3,3), activation='relu', padding='same', input_shape=(32,32,1) ) )
+model.add( tf.keras.layers.Conv2D(64, (3,3), activation='relu', padding='same' ) )
+model.add( tf.keras.layers.MaxPooling2D(pool_size=(2,2)) )
 
-model.add( keras.layers.Conv2D(128, (3,3), activation='relu', padding='same', input_shape=(32,32,1) ) )
-model.add( keras.layers.Conv2D(128, (3,3), activation='relu', padding='same' ) )
-model.add( keras.layers.MaxPooling2D(pool_size=(2,2)) )
+model.add( tf.keras.layers.Conv2D(128, (3,3), activation='relu', padding='same', input_shape=(32,32,1) ) )
+model.add( tf.keras.layers.Conv2D(128, (3,3), activation='relu', padding='same' ) )
+model.add( tf.keras.layers.MaxPooling2D(pool_size=(2,2)) )
 
-model.add( keras.layers.Flatten() )
-model.add( keras.layers.Dense(128, activation='relu'))
-model.add( keras.layers.Dense(10, activation='softmax'))
+model.add( tf.keras.layers.Flatten() )
+model.add( tf.keras.layers.Dense(128, activation='relu'))
+model.add( tf.keras.layers.Dense(10, activation='softmax'))
 
 
 model.summary()
-keras.utils.plot_model( model, show_shapes=True )
+tf.keras.utils.plot_model( model, show_shapes=True )
 
 
 
 #-----------------------------------------------------------------------------
 # Compile
 # optimizer = tf.keras.optimizers.Adam(lr=1e-5)
-optimizer = keras.optimizers.RMSprop(lr=1e-4)
+optimizer = tf.keras.optimizers.RMSprop(lr=1e-4)
 
 model.compile(optimizer=optimizer,
               # loss='categorical_crossentropy',

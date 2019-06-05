@@ -94,20 +94,20 @@ for i in range(100):
     # start_t = time.time()
     bstart = i*batch_size
     bend = (i+1)*batch_size
-    print 'using : ', bstart, bend , '--->',
+    print( 'using : ', bstart, bend , '--->', )
 
     feed_in = x_train[bstart:bend,:,:].reshape( batch_size, 28*28 )
     feed_lab = y_train[bstart:bend]
 
     tff_loss, _ = sess.run( [loss,train_step], feed_dict={in_:feed_in  , labels_out_:feed_lab } )
-    print i, tff_loss#, ' took %4.2fms' %(time.time() - start_t)
+    print( i, tff_loss )#, ' took %4.2fms' %(time.time() - start_t)
 
 
 
 #------------------------------------------------------------------------
 # Save Model
 saver = tf.train.Saver()
-print 'Save Model'
+print( 'Save Model' )
 save_path = saver.save(sess, "./mnist.model/model.ckpt")
 
 
@@ -118,7 +118,7 @@ final_labels = final_predictions.argmax( axis=1 )
 
 for i in range(100):
     cv2.imshow( 'x_test',  x_test[i,:,:] )
-    print i, y_test[i], final_labels[i]
+    print( i, y_test[i], final_labels[i] )
     key = cv2.waitKey(0)
     if key == ord('q'):
         break

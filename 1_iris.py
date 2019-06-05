@@ -27,11 +27,11 @@ def load_iris_data():
     try:
         X = np.loadtxt( 'iris.data/iris_training.csv', skiprows=1, delimiter=',' )
     except:
-        print 'iris_training.csv file not found.\nDownload from : https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/tutorials/monitors/iris_training.csv'
-        print """
+        print( 'iris_training.csv file not found.\nDownload from : https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/tutorials/monitors/iris_training.csv' )
+        print( """
             mkdir iris.data
             wget https://raw.githubusercontent.com/tensorflow/tensorflow/master/tensorflow/examples/tutorials/monitors/iris_training.csv -P iris.data/
-        """
+        """)
 
         quit()
     labels = X[:,-1]
@@ -91,7 +91,7 @@ if __name__=='__main__':
     #----------------------------------------------------------------------
     # Initialize Optimization Variables - Xavier
     if True:
-        print 'Random Init'
+        print( 'Random Init' )
         init_op = tf.global_variables_initializer()
         sess.run(init_op)
 
@@ -99,7 +99,7 @@ if __name__=='__main__':
     # Restore Pretrained Model
     # TODO: This is a ugly way. Best is to use keras's model.save() and model.load()
     if False:
-        print 'Restore Model'
+        print( 'Restore Model' )
         saver = tf.train.Saver()
         saver.restore(sess, "./iris.model/model.ckpt")
 
@@ -109,7 +109,7 @@ if __name__=='__main__':
     train_step = tf.train.GradientDescentOptimizer(0.005).minimize(loss)
     for i in range(100):
         tff_loss, _ =  sess.run( [loss, train_step], feed_dict={in_feat: feat , in_logits:desired_logits, in_labels: desired_labels } )
-        print 'Iteration#%di: Loss=%4.4f' %(i, tff_loss)
+        print(  'Iteration#%di: Loss=%4.4f' %(i, tff_loss) )
 
 
 
@@ -117,12 +117,12 @@ if __name__=='__main__':
     # Save Model
     # TODO: This is a ugly way. Best is to use keras's model.save() and model.load()
     saver = tf.train.Saver()
-    print 'Save Model'
+    print( 'Save Model' )
     save_path = saver.save(sess, "./iris.model/model.ckpt")
 
 
     #------------------------------------------------------------------------
     # Run Trained Model - Test Phase
     final_predictions =  sess.run( model(in_feat), feed_dict={in_feat: feat} )
-    print 'final_predictions: ', final_predictions.argmax(axis=1)
-    print 'desired_labels: ', desired_labels
+    print( 'final_predictions: ', final_predictions.argmax(axis=1) )
+    print( 'desired_labels: ', desired_labels )

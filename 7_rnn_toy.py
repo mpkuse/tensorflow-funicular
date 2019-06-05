@@ -6,7 +6,8 @@ http://karpathy.github.io/2015/05/21/rnn-effectiveness/
 """
 
 
-import keras
+# import keras
+import tensorflow as tf
 import numpy as np
 import code
 
@@ -41,22 +42,22 @@ y.append( o )
 
 x = np.array( x )
 y = np.array( y )
-print 'x.shape', x.shape
-print 'y.shape', y.shape
+print( 'x.shape', x.shape )
+print( 'y.shape', y.shape )
 # code.interact( local=locals() )
 
 #---
 #--- Construct Network
 #---
-model = keras.Sequential()
-model.add(keras.layers.LSTM(7, input_shape=(4, 4)))
-model.add(keras.layers.Dense(4, activation='softmax'))
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.LSTM(7, input_shape=(4, 4)))
+model.add(tf.keras.layers.Dense(4, activation='softmax'))
 
 model.summary()
-keras.utils.plot_model( model, show_shapes=True )
+tf.keras.utils.plot_model( model, show_shapes=True )
 
 
-optimizer = keras.optimizers.RMSprop(lr=0.01)
+optimizer = tf.keras.optimizers.RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
 
 model.fit(x=x, y=y, batch_size=4, epochs=20 )

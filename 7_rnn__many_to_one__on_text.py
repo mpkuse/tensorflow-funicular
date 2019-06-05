@@ -1,6 +1,7 @@
 """ Taken a corpus of text as input and predicts the next word """
 
-import keras
+# import keras
+import tensorflow as tf
 import numpy as np
 import code
 import io
@@ -9,7 +10,7 @@ import io
 #---
 #--- Get Remote File
 #---
-path = keras.utils.data_utils.get_file(
+path = tf.keras.utils.data_utils.get_file(
     'nietzsche.txt',
     origin='https://s3.amazonaws.com/text-datasets/nietzsche.txt')
 with io.open(path, encoding='utf-8') as f:
@@ -31,7 +32,7 @@ x = []
 y = []
 for i in range( 0, len(text)-W, 500 ): # make this 3 on pc with larger memory
     if i%10000 == 0:
-        print 'process char#', i , ' of ', len(text)
+        print( 'process char#', i , ' of ', len(text) )
     # print i, i+W
     cur_text = text[i:i+W]
     next_char = text[i+W]
@@ -53,27 +54,27 @@ for i in range( 0, len(text)-W, 500 ): # make this 3 on pc with larger memory
     # quit()
 x = np.array( x )
 y = np.array( y )
-print 'x.shape', x.shape
-print 'y.shape', y.shape
+print( 'x.shape', x.shape )
+print( 'y.shape', y.shape )
 
 #---
 #--- Construct Network
 #---
-model = keras.Sequential()
-model.add(keras.layers.LSTM(512, input_shape=( x.shape[1], x.shape[2]), return_sequences=True ))
-model.add(keras.layers.LSTM(512 ) )
-model.add(keras.layers.Dense( 220, activation='relu', kernel_regularizer=keras.regularizers.l2(0.0001) ) )
-model.add(keras.layers.Dense( x.shape[2], activation='softmax', kernel_regularizer=keras.regularizers.l2(0.0001) ) )
+model = tf.keras.Sequential()
+model.add(tf.keras.layers.LSTM(512, input_shape=( x.shape[1], x.shape[2]), return_sequences=True ))
+model.add(tf.keras.layers.LSTM(512 ) )
+model.add(tf.keras.layers.Dense( 220, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.0001) ) )
+model.add(tf.keras.layers.Dense( x.shape[2], activation='softmax', kernel_regularizer=tf.keras.regularizers.l2(0.0001) ) )
 
 
 model.summary()
-keras.utils.plot_model( model, show_shapes=True )
+tf.keras.utils.plot_model( model, show_shapes=True )
 
 #---
 #--- Fit
 #---
-# optimizer = keras.optimizers.RMSprop(lr=0.0005)
-optimizer = keras.optimizers.Adadelta(  )
+# optimizer = tf.keras.optimizers.RMSprop(lr=0.0005)
+optimizer = tf.keras.optimizers.Adadelta(  )
 
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'] )
 if False:
@@ -98,15 +99,15 @@ if True:
         seed[0,i,r] = 1
     orf_seed = seed
 
-print 'seed.shape=', seed.shape
+print( 'seed.shape=', seed.shape )
 assert( len(seed.shape) == 3 and seed.shape[0] == 1 and seed.shape[1] == W and seed.shape[2] == len(chars) )
 
 ALL_GEN = []
 ALL_GEN_confidence = []
-print 'Generating 2000 chars'
+print(  'Generating 2000 chars' )
 for i in range(2000):
     if i%100==0:
-        print 'Generated char #',i
+        print( 'Generated char #',i )
     pr = model.predict( seed )[0].argmax() #index of prediction.
     pr_confidence = model.predict( seed )[0].max() #confidence of prediction.
     pr_ch = indices_char[ pr ] #look this up in the vocab
@@ -124,7 +125,7 @@ for i in range(2000):
 
     seed = new_seed
 
-print ''.join( ALL_GEN )
+print(  ''.join( ALL_GEN ) )
 
 # print ''
 # print ''.join( [ indices_char[v] for v in orf_seed.argmax( axis=-1 )[0] ] )
@@ -139,8 +140,8 @@ for ch, ch_conf in zip(ALL_GEN, ALL_GEN_confidence):
         color = '\033[93m'
     else:
         color = '\033[91m'
-    print '%s%s%s' %(color,ch,endc),
-print ''
+    print( '%s%s%s' %(color,ch,endc), )
+print( '' )
 
 # After learning this net for about 120 epochs (took an hour on my TitanX gpu.)
 # here, is a sample generation:

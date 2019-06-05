@@ -1,9 +1,10 @@
 # Demo on convolutional lstm
-import keras
-from keras.models import Sequential
-from keras.layers.convolutional import Conv3D
-from keras.layers.convolutional_recurrent import ConvLSTM2D
-from keras.layers.normalization import BatchNormalization
+# import keras
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv3D
+from tensorflow.keras.layers import ConvLSTM2D
+from tensorflow.keras.layers import BatchNormalization
 import numpy as np
 import cv2
 
@@ -102,13 +103,13 @@ model.add(Conv3D(filters=1, kernel_size=(3, 3, 3),
 
 
 model.summary()
-keras.utils.plot_model( model, show_shapes=True )
+tf.keras.utils.plot_model( model, show_shapes=True )
 
 
 #---
 #--- Training / Load Weights
 #---
-if False:
+if True:
     model.compile(loss='binary_crossentropy', optimizer='adadelta')
     model.fit(u, v, batch_size=10,
             epochs=10, validation_split=0.05)
@@ -128,6 +129,6 @@ for j in range(16):
     new = new_pos[:, -1, :, :, :] #last image
     track = np.concatenate((track, new), axis=0)
 
-    print j
+    print( j  )
     cv2.imshow( 'new', (new[0]*255).astype('uint8') )
     cv2.waitKey(0)
